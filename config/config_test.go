@@ -4,10 +4,9 @@ import (
 	"testing"
 )
 
+const testConfig = "../TestResources/test_config.toml"
 
 func TestLoadConfig(t *testing.T) {
-	goodConfigPath := "../TestResources/test_config.toml"
-
 	expectedGoodConfig := Config{
 		Incoming: IncomingData {
 			DataSrc: "https://api.hatchways.io/assessment/blog/posts",
@@ -15,7 +14,7 @@ func TestLoadConfig(t *testing.T) {
 		Outgoing: OutgoingData{},
 	}
 
-	if goodConfig, err := LoadConfig(goodConfigPath); err != nil {
+	if goodConfig, err := LoadConfig(testConfig); err != nil {
 		t.Error("Failed to load valid config: " + err.Error())
 		t.Fail()
 	}else {

@@ -20,5 +20,6 @@ test:
 	$(GOTEST) -v ./...
 
 build-and-run:
+	$(MAKE) -s test
 	$(MAKE) -s build
 	./build/hwApi --config "./build/config.toml"

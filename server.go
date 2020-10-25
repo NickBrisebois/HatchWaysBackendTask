@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"github.com/NickBrisebois/HatchWaysAppBackend/config"
 	"log"
 )
@@ -18,7 +19,8 @@ func main() {
 	}
 
 	postsRetriever := NewPostsRetriever(apiConfig)
-	err = postsRetriever.GetPosts()
+	posts, err := postsRetriever.GetPosts("tech")
+	fmt.Print(posts)
 
 	if err != nil {
 		log.Fatal("Error retrieving posts: " + err.Error())
