@@ -14,5 +14,11 @@ build:
 	$(MAKE) -s go-build
 
 go-build:
-	@GOPATH=$(GOPATH) go build -o ./build/$(BINARY_NAME)
+	@GOPATH=$(GOPATH) $(GOBUILD) -o ./build/$(BINARY_NAME)
 
+test:
+	$(GOTEST) -v ./...
+
+build-and-run:
+	$(MAKE) -s build
+	./build/hwApi --config "./build/config.toml"

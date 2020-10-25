@@ -1,5 +1,4 @@
+[incoming_data]
+data_src = "https://api.hatchways.io/assessment/blog/posts"
 
-[incomingData]
-dataSrc = "​https://api.hatchways.io/assessment/blog/posts"
-
-[outgoingData]
+[outgoing_data]

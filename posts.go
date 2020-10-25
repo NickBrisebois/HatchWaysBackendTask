@@ -1,19 +1,21 @@
 package main
 
 import (
-	"go/types"
+	"fmt"
+	"github.com/NickBrisebois/HatchWaysAppBackend/config"
+	"io/ioutil"
 	"net/http"
 )
 
 type PostsRetriever struct {
-	config *types.Config
+	config *config.Config
 }
 
 type Post struct {
 
 }
 
-func NewPostsRetriever(config *types.Config) *PostsRetriever {
+func NewPostsRetriever(config *config.Config) *PostsRetriever {
 	return &PostsRetriever{
 		config: config,
 	}
@@ -25,6 +27,14 @@ func (pr *PostsRetriever) GetPosts() error {
 	if err != nil {
 		return err
 	}
+
+	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return err
+	}
+
+	fmt.Print(string(body))
 
 	return nil
 }

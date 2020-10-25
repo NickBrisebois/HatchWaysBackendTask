@@ -2,7 +2,6 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"github.com/NickBrisebois/HatchWaysAppBackend/config"
 	"log"
 )
@@ -13,11 +12,15 @@ func main() {
 
 	apiConfig, err := config.LoadConfig(*configPath)
 
-	fmt.Println(apiConfig)
-
 	if err != nil {
-		log.Fatal(err.Error())
+		log.Fatal("Config loading error: " + err.Error())
 		return
 	}
 
+	postsRetriever := NewPostsRetriever(apiConfig)
+	err = postsRetriever.GetPosts()
+
+	if err != nil {
+		log.Fatal("Error retrieving posts: " + err.Error())
+	}
 }
