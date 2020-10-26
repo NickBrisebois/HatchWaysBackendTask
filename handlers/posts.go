@@ -1,12 +1,13 @@
+// Package handlers provides handlers for different API routes
 package handlers
 
 import (
 	"context"
 	"encoding/json"
+	"golang.org/x/sync/errgroup"
 	"io/ioutil"
 	"net/http"
 	"sort"
-	"golang.org/x/sync/errgroup"
 )
 
 // Post is a struct representing a single JSON Post data object

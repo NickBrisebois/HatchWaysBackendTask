@@ -1,3 +1,4 @@
+// Package handlers provides handlers for different API routes
 package handlers
 
 import (

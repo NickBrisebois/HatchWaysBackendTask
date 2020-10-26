@@ -8,6 +8,7 @@ all: test build
 
 .PHONY: test build
 build:
+	go mod vendor;
 	rm -rf ./build/;
 	mkdir ./build;
 	cp -r ./config.toml ./build/

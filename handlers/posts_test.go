@@ -1,3 +1,4 @@
+// Package handlers provides handlers for different API routes
 package handlers
 
 import (
@@ -22,7 +23,6 @@ func TestGetPosts(t *testing.T) {
 		50361,
 		[]string{"tech", "health"},
 	}
-	_ = expectedTestData
 
 	if err != nil {
 		t.Error("Error loading test conf: " + err.Error())
