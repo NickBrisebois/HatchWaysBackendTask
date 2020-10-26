@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"github.com/NickBrisebois/HatchWaysAppBackend/config"
@@ -38,8 +39,23 @@ func PostsHandler (c *gin.Context) {
 		return
 	}
 
-	fmt.Println(posts)
+	sortedPosts := sortPosts(posts, queryConfig.direction, queryConfig.sortBy)
+	// containerize posts inside an upper Posts struct (for matching output in assignment)
+	containerPosts := &Posts {
+		Posts: sortedPosts,
+	}
+
+	if response, err := json.Marshal(&containerPosts); err != nil {
+		errMsg := gin.H{"Error generating response": err.Error()}
+		c.JSON(http.StatusInternalServerError, errMsg)
+		return
+	}else {
+		fmt.Println(string(response))
+		c.JSON(http.StatusOK, string(response))
+	}
+
 }
+
 
 // isValidSortBy checks the selected sortBy method and returns true or false whether its valid or not
 func isValidSortBy(chosenSort string) bool {
