@@ -1,12 +1,12 @@
-package main
+package handlers
 
 import (
 	config "github.com/NickBrisebois/HatchWaysAppBackend/config"
-	"testing"
 	"reflect"
+	"testing"
 )
 
-const testConfig = "./TestResources/test_config.toml"
+const testConfig = "../TestResources/test_config.toml"
 
 func TestPostsRetriever_GetPosts(t *testing.T) {
 	config, err := config.LoadConfig(testConfig)

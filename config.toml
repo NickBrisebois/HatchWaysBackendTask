@@ -1,4 +1,6 @@
 [incoming_data]
 data_src = "https://api.hatchways.io/assessment/blog/posts"
 
-[outgoing_data]
+[server]
+api_prefix = "/api"
+address = "localhost:8080"

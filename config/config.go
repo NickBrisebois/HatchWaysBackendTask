@@ -6,15 +6,16 @@ import (
 
 type Config struct {
 	Incoming IncomingData `toml:"incoming_data"`
-	Outgoing OutgoingData `toml:"outgoing_data"`
+	Server Server `toml:"server"`
 }
 
 type IncomingData struct {
 	DataSrc string `toml:"data_src"`
 }
 
-type OutgoingData struct {
-
+type Server struct {
+	APIPrefix string `toml:"api_prefix"`
+	Address string `toml:"address"`
 }
 
 func LoadConfig (configPath string) (*Config, error) {

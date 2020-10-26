@@ -11,7 +11,10 @@ func TestLoadConfig(t *testing.T) {
 		Incoming: IncomingData {
 			DataSrc: "https://api.hatchways.io/assessment/blog/posts",
 		},
-		Outgoing: OutgoingData{},
+		Server: Server{
+			APIPrefix: "/api",
+			Address: "localhost:8080",
+		},
 	}
 
 	if goodConfig, err := LoadConfig(testConfig); err != nil {

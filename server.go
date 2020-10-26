@@ -2,10 +2,30 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"github.com/NickBrisebois/HatchWaysAppBackend/config"
+	"github.com/NickBrisebois/HatchWaysAppBackend/handlers"
+	"github.com/gin-gonic/gin"
 	"log"
+	"net/http"
 )
+
+func serve(config *config.Config) {
+	router := gin.Default()
+
+	api := router.Group(config.Server.APIPrefix)
+	api.GET("/ping", handlers.Ping)
+
+	server := &http.Server {
+		Addr: config.Server.Address,
+		Handler: router,
+	}
+
+	log.Println("Starting HatchWays API Server")
+	if err := server.ListenAndServe(); err != nil {
+		log.Fatal("Error starting HatchWays API Server: " + err.Error())
+	}
+
+}
 
 func main() {
 	configPath := flag.String("config", "./config.toml", "Path to config.toml file")
@@ -18,11 +38,5 @@ func main() {
 		return
 	}
 
-	postsRetriever := NewPostsRetriever(apiConfig)
-	posts, err := postsRetriever.GetPosts("tech")
-	fmt.Print(posts)
-
-	if err != nil {
-		log.Fatal("Error retrieving posts: " + err.Error())
-	}
+	serve(apiConfig)
 }
