@@ -4,7 +4,7 @@ GOCLEAN=$(GOCMD) clean
 GOTEST=$(GOCMD) test
 BINARY_NAME=hwApi
 
-all: build
+all: test build
 
 .PHONY: test build
 build:
@@ -18,8 +18,3 @@ go-build:
 
 test:
 	$(GOTEST) -v ./...
-
-build-and-run:
-	$(MAKE) -s test
-	$(MAKE) -s build
-	./build/hwApi --config "./build/config.toml"

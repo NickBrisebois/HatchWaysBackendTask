@@ -9,6 +9,7 @@ import (
 	"net/http"
 )
 
+// serve is the main server function which sets up the HTTP server main loop
 func serve(config *config.Config) {
 	router := gin.Default()
 
@@ -34,6 +35,7 @@ func serve(config *config.Config) {
 
 }
 
+// main parses flags then calls main server loop
 func main() {
 	configPath := flag.String("config", "./config.toml", "Path to config.toml file")
 	flag.Parse()

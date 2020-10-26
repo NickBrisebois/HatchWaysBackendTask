@@ -1,10 +1,12 @@
 package handlers
 
 import (
+	"context"
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
 	"sort"
+	"golang.org/x/sync/errgroup"
 )
 
 // Post is a struct representing a single JSON Post data object
@@ -58,19 +60,50 @@ func getPosts(tag string) (*Posts, error) {
 // getCombinedPosts retrieves all posts from all of the given tags
 func getCombinedPosts(tags []string) ([]Post, error) {
 	var combinedPosts []Post
+
+	// Create an error group so that we can use goroutines to concurrently
+	// fetch posts and any errors that occur
+	apiCallErrors, _ := errgroup.WithContext(context.Background())
 	// Loop through all given tags and combine them
 	for _, tag := range tags {
-		// Get posts from this tag
-		postsFromTag, err := getPosts(tag)
-		if err != nil {
-			return nil, err
-		}
+		// Spawn new goroutine to retrieve posts under this tag
+		apiCallErrors.Go(func() error {
+			// Get posts from this tag
+			postsFromTag, err := getPosts(tag)
+			if err != nil {
+				return err
+			}
 
-		// Add all posts from this tag to combined list of posts
-		combinedPosts = append(combinedPosts, postsFromTag.Posts...)
+			// Add all posts from this tag to combined list of posts
+			combinedPosts = append(combinedPosts, postsFromTag.Posts...)
+			return nil
+		})
+	}
+	// Wait for goroutines to finish then check for errors
+	err := apiCallErrors.Wait()
+	if err != nil {
+		// This will be the first (or only) error that occurred when retrieving posts
+		return nil, err
 	}
 
-	return combinedPosts, nil
+	// Remove dupes
+	postsNoDuplicates := removeDuplicatePosts(combinedPosts)
+	return postsNoDuplicates, nil
+}
+
+// removeDuplicatePosts removes duplicates from given posts using post ID
+func removeDuplicatePosts(posts []Post) []Post {
+	occurredPosts := map[int]bool{}
+	var result []Post
+
+	for _, post := range posts {
+		if !occurredPosts[post.ID] {
+			occurredPosts[post.ID] = true
+			result = append(result, post)
+		}
+	}
+
+	return result
 }
 
 // sortPosts sorts given posts in ascending or descending manner by the selected sortBy value
