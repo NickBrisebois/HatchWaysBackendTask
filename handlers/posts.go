@@ -3,14 +3,9 @@ package handlers
 import (
 	"encoding/json"
 	_ "encoding/json"
-	"github.com/NickBrisebois/HatchWaysAppBackend/config"
 	"io/ioutil"
 	"net/http"
 )
-
-type PostsRetriever struct {
-	config *config.Config
-}
 
 type Post struct {
 	Author     string   `json:"author"`
@@ -26,14 +21,9 @@ type Posts struct {
 	Posts []Post `json:"posts"`
 }
 
-func NewPostsRetriever(config *config.Config) *PostsRetriever {
-	return &PostsRetriever{
-		config: config,
-	}
-}
-
-func (pr *PostsRetriever) GetPosts(tag string) (*Posts, error) {
-	getPostsURL := pr.config.Incoming.DataSrc + "?tag=" + tag
+// getPosts gets all posts from given tag from HatchWays API
+func getPosts(tag string) (*Posts, error) {
+	getPostsURL := serverConfig.Incoming.DataSrc + "?tag=" + tag
 	resp, err := http.Get(getPostsURL)
 	if err != nil {
 		return nil, err
@@ -51,4 +41,22 @@ func (pr *PostsRetriever) GetPosts(tag string) (*Posts, error) {
 	}
 
 	return &posts, nil
+}
+
+// getCombinedPosts retrieves all posts from all of the given tags
+func getCombinedPosts(tags []string) ([]Post, error) {
+	var combinedPosts []Post
+	// Loop through all given tags and combine them
+	for _, tag := range tags {
+		// Get posts from this tag
+		postsFromTag, err := getPosts(tag)
+		if err != nil {
+			return nil, err
+		}
+
+		// Add all posts from this tag to combined list of posts
+		combinedPosts = append(combinedPosts, postsFromTag.Posts...)
+	}
+
+	return combinedPosts, nil
 }
