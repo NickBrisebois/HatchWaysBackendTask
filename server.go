@@ -12,14 +12,21 @@ import (
 func serve(config *config.Config) {
 	router := gin.Default()
 
-	api := router.Group(config.Server.APIPrefix)
-	api.GET("/ping", handlers.Ping)
+	// Set the config in our handlers to give them access to server configuration
+	handlers.SetConfig(config)
 
+	// Initialize our routes to point to our handlers
+	api := router.Group(config.Server.APIPrefix)
+	api.GET("/ping", handlers.PingHandler)
+	api.GET("/posts", handlers.PostsHandler)
+
+	// Configure the HTTP server
 	server := &http.Server {
 		Addr: config.Server.Address,
 		Handler: router,
 	}
 
+	// Start the HTTP server
 	log.Println("Starting HatchWays API Server")
 	if err := server.ListenAndServe(); err != nil {
 		log.Fatal("Error starting HatchWays API Server: " + err.Error())

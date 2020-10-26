@@ -5,7 +5,12 @@ import (
 	"net/http"
 )
 
-func Ping(c *gin.Context) {
+func getPingResponse() gin.H {
 	response := gin.H{"success": true}
+	return response
+}
+
+func PingHandler (c *gin.Context) {
+	response := getPingResponse()
 	c.JSON(http.StatusOK, response)
 }

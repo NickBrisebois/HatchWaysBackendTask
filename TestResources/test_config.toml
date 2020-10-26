@@ -1,6 +1,9 @@
 [incoming_data]
 data_src = "https://api.hatchways.io/assessment/blog/posts"
 
+[api_settings]
+acceptable_sortby = ["id", "reads", "likes", "popularity"]
+
 [server]
 api_prefix = "/api"
 address = "localhost:8080"

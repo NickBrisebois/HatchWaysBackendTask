@@ -6,11 +6,16 @@ import (
 
 type Config struct {
 	Incoming IncomingData `toml:"incoming_data"`
+	APISettings APISettings `toml:"api_settings"`
 	Server Server `toml:"server"`
 }
 
 type IncomingData struct {
 	DataSrc string `toml:"data_src"`
+}
+
+type APISettings struct {
+	AcceptableSortBy []string `toml:"acceptable_sortby"`
 }
 
 type Server struct {
